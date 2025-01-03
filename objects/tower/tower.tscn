@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://8a1wtxhqnk46"]
+
+[ext_resource type="Script" uid="uid://vu0xbs65fjml" path="res://objects/tower/tower_generic.gd" id="1_qha5b"]
+[ext_resource type="Texture2D" uid="uid://1p8wm24yp2st" path="res://objects/tower/twr_base.png" id="1_srltv"]
+[ext_resource type="Script" uid="uid://dqlywr2qmsrac" path="res://objects/tower/abilities.gd" id="2_yrjl3"]
+[ext_resource type="Script" uid="uid://bfo0t36eiylq2" path="res://objects/tower/ability_generic.gd" id="3_kqk5d"]
+[ext_resource type="Script" uid="uid://bbvkmmm86vxkl" path="res://objects/tower/view.gd" id="4_rdglu"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ntgk4"]
+radius = 60.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_l84ah"]
+
+[node name="Tower" type="CharacterBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_qha5b")
+
+[node name="Abilities" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_yrjl3")
+
+[node name="Ability" type="Node2D" parent="Abilities"]
+script = ExtResource("3_kqk5d")
+
+[node name="ViewArea" type="Area2D" parent="Abilities/Ability"]
+collision_layer = 32
+collision_mask = 4
+script = ExtResource("4_rdglu")
+
+[node name="Collision" type="CollisionShape2D" parent="Abilities/Ability/ViewArea"]
+shape = SubResource("CircleShape2D_ntgk4")
+
+[node name="NoObstacle" type="RayCast2D" parent="Abilities/Ability/ViewArea"]
+target_position = Vector2(0, 60)
+collision_mask = 3
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_l84ah")
+
+[node name="Base" type="Sprite2D" parent="."]
+texture = ExtResource("1_srltv")
+
+[connection signal="body_entered" from="Abilities/Ability/ViewArea" to="Abilities/Ability/ViewArea" method="add_enemy"]
+[connection signal="body_exited" from="Abilities/Ability/ViewArea" to="Abilities/Ability/ViewArea" method="remove_enemy"]

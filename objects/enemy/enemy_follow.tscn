@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bk0758xpby1jg"]
+
+[ext_resource type="Script" uid="uid://bp2vu7xwmppiw" path="res://objects/enemy/enemy.gd" id="1_aj7mv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3hggp"]
+size = Vector2(18, 15)
+
+[node name="EnemyFollow" type="PathFollow2D"]
+
+[node name="Enemy" type="CharacterBody2D" parent="."]
+script = ExtResource("1_aj7mv")
+
+[node name="Polygon2D" type="Polygon2D" parent="Enemy"]
+polygon = PackedVector2Array(-5, -9, 13, 0, -5, 8, -2, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
+position = Vector2(4, -0.5)
+shape = SubResource("RectangleShape2D_3hggp")
