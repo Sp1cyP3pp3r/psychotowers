@@ -1,0 +1,59 @@
+[gd_scene load_steps=9 format=3 uid="uid://dc58a3wpfly63"]
+
+[ext_resource type="Script" uid="uid://d1hf1fuauaq16" path="res://objects/tower/abilities/shooter.gd" id="1_h0xy5"]
+[ext_resource type="Script" uid="uid://bfo0t36eiylq2" path="res://objects/tower/abilities/ability_generic.gd" id="1_pr7pl"]
+[ext_resource type="Script" uid="uid://bf8k1su06858r" path="res://objects/tower/abilities/ability_parameters.gd" id="2_c3u1a"]
+[ext_resource type="PackedScene" uid="uid://dkq5dyfxxb0o8" path="res://objects/tower/view_area_2d.tscn" id="3_c3u1a"]
+[ext_resource type="Texture2D" uid="uid://fhpqhlwd2uyp" path="res://objects/tower/twr_gun.png" id="5_puc03"]
+[ext_resource type="PackedScene" uid="uid://bqcb2r7cqy548" path="res://objects/tower/projectiles/projectile.tscn" id="6_5vlav"]
+
+[sub_resource type="Resource" id="Resource_5vlav"]
+script = ExtResource("2_c3u1a")
+range = 50.5
+cool_down = 20.0
+power = 0.0
+metadata/_custom_type_script = ExtResource("2_c3u1a")
+
+[sub_resource type="GDScript" id="GDScript_puc03"]
+script/source = "extends Marker2D
+
+@export var projectile : PackedScene
+var i : float = 10
+
+	
+func shoot(target) -> void:
+	var bullet : Projectile = projectile.instantiate()
+	get_tree().root.add_child(bullet)
+	bullet.rotation = get_parent().rotation
+	bullet.global_position = global_position
+"
+
+[node name="Shooter" type="Node2D" node_paths=PackedStringArray("view", "cd_timer")]
+script = ExtResource("1_h0xy5")
+view = NodePath("ViewArea2D")
+cd_timer = NodePath("Timer")
+parameters = SubResource("Resource_5vlav")
+metadata/_custom_type_script = ExtResource("1_pr7pl")
+
+[node name="ViewArea2D" parent="." instance=ExtResource("3_c3u1a")]
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[node name="Gun" type="Sprite2D" parent="."]
+position = Vector2(1, 0.5)
+texture = ExtResource("5_puc03")
+
+[node name="Gunpoint" type="Marker2D" parent="Gun"]
+position = Vector2(7, -0.5)
+script = SubResource("GDScript_puc03")
+projectile = ExtResource("6_5vlav")
+
+[connection signal="no_target" from="." to="." method="_on_no_target"]
+[connection signal="target_assigned" from="." to="." method="_on_target_assigned"]
+[connection signal="enemies_clear" from="ViewArea2D" to="." method="_on_view_area_2d_enemies_clear"]
+[connection signal="enemy_appeared" from="ViewArea2D" to="." method="_on_view_area_2d_enemy_appeared"]
+[connection signal="enemy_exited" from="ViewArea2D" to="." method="_on_view_area_2d_enemy_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="cooldown_end"]

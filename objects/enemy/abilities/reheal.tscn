@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://1bbkm3q7nyth"]
+
+[ext_resource type="Script" uid="uid://dwuduspyl6j5l" path="res://objects/enemy/abilities/reheal.gd" id="1_6rcyd"]
+[ext_resource type="Script" uid="uid://bpye4ktvcc1tc" path="res://objects/enemy/abilities/enemy_ability_generic.gd" id="1_id442"]
+[ext_resource type="Script" uid="uid://ba734ysspt8yo" path="res://objects/enemy/abilities/EnemyAbilityParameters.gd" id="2_bp1up"]
+
+[sub_resource type="Resource" id="Resource_u0s6c"]
+resource_local_to_scene = true
+script = ExtResource("2_bp1up")
+metadata/_custom_type_script = ExtResource("2_bp1up")
+
+[node name="Reheal" type="Node2D"]
+script = ExtResource("1_6rcyd")
+parameters = SubResource("Resource_u0s6c")
+metadata/_custom_type_script = ExtResource("1_id442")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

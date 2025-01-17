@@ -23,13 +23,18 @@ resources_spreadsheet_view/resource_cell_label_mode=1
 [application]
 
 config/name="PsychoTowers"
+config/tags=PackedStringArray("current")
 run/main_scene="uid://djnxh23vndskx"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
-[editor_plugins]
+[autoload]
 
-enabled=PackedStringArray("res://addons/resources_spreadsheet_view/plugin.cfg")
+EB="*res://objects/event bus/event_bus.tscn"
+
+[global_group]
+
+Enemy=""
 
 [layer_names]
 

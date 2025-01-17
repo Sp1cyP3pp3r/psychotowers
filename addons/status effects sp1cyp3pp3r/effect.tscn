@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://biker8cf5df2b"]
+
+[ext_resource type="Script" uid="uid://cx8ijx1jcas4e" path="res://addons/status effects sp1cyp3pp3r/effect.gd" id="1_6sax7"]
+[ext_resource type="Script" uid="uid://dpj0texv6ihpj" path="res://addons/status effects sp1cyp3pp3r/effected_property.gd" id="2_b54ua"]
+
+[sub_resource type="Resource" id="Resource_ik4f6"]
+script = ExtResource("2_b54ua")
+name = &""
+value = 0.0
+mode = 0
+metadata/_custom_type_script = ExtResource("2_b54ua")
+
+[node name="Effect" type="Node"]
+script = ExtResource("1_6sax7")
+properties_array = Array[ExtResource("2_b54ua")]([SubResource("Resource_ik4f6")])

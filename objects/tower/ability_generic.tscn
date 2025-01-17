@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://c4mbc4eqoqevf"]
+
+[ext_resource type="Script" uid="uid://bfo0t36eiylq2" path="res://objects/tower/abilities/ability_generic.gd" id="1_yabci"]
+[ext_resource type="Script" uid="uid://bf8k1su06858r" path="res://objects/tower/abilities/ability_parameters.gd" id="2_lagoo"]
+[ext_resource type="PackedScene" uid="uid://dkq5dyfxxb0o8" path="res://objects/tower/view_area_2d.tscn" id="2_yabci"]
+
+[sub_resource type="Resource" id="Resource_lagoo"]
+resource_local_to_scene = true
+script = ExtResource("2_lagoo")
+range = 0.0
+cool_down = 0.0
+power = 0.0
+metadata/_custom_type_script = ExtResource("2_lagoo")
+
+[node name="AbilityGeneric" type="Node2D" node_paths=PackedStringArray("view", "cd_timer")]
+script = ExtResource("1_yabci")
+view = NodePath("ViewArea2D")
+cd_timer = NodePath("Timer")
+parameters = SubResource("Resource_lagoo")
+
+[node name="ViewArea2D" parent="." instance=ExtResource("2_yabci")]
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="cooldown_end"]

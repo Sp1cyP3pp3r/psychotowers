@@ -1,0 +1,2 @@
+extends Parameters
+class_name EnemyAbilityParameters

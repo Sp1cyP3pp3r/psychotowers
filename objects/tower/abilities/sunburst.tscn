@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://nl8ld3drshgy"]
+
+[ext_resource type="Script" uid="uid://cssynthhl4fhc" path="res://objects/tower/abilities/sunburst.gd" id="1_0tbrf"]
+[ext_resource type="Script" uid="uid://bfo0t36eiylq2" path="res://objects/tower/abilities/ability_generic.gd" id="1_uqer4"]
+[ext_resource type="Script" uid="uid://bf8k1su06858r" path="res://objects/tower/abilities/ability_parameters.gd" id="2_1rreq"]
+
+[sub_resource type="Resource" id="Resource_2hyr0"]
+script = ExtResource("2_1rreq")
+range = 0.0
+cool_down = 500.0
+power = 30.0
+metadata/_custom_type_script = ExtResource("2_1rreq")
+
+[node name="Sunburst" type="Node2D" node_paths=PackedStringArray("cd_timer")]
+script = ExtResource("1_0tbrf")
+cd_timer = NodePath("Timer")
+parameters = SubResource("Resource_2hyr0")
+metadata/_custom_type_script = ExtResource("1_uqer4")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="cooldown_end"]

@@ -1,14 +1,54 @@
-[gd_scene load_steps=3 format=3 uid="uid://bk0758xpby1jg"]
+[gd_scene load_steps=11 format=3 uid="uid://bk0758xpby1jg"]
 
 [ext_resource type="Script" uid="uid://bp2vu7xwmppiw" path="res://objects/enemy/enemy.gd" id="1_aj7mv"]
+[ext_resource type="Script" uid="uid://5a73qrvoh4qv" path="res://objects/enemy/enemy_params.gd" id="2_bqkuj"]
+[ext_resource type="PackedScene" uid="uid://ctugs1kl1t4ur" path="res://objects/health/health.tscn" id="3_bqkuj"]
+[ext_resource type="PackedScene" uid="uid://1bbkm3q7nyth" path="res://objects/enemy/abilities/reheal.tscn" id="4_u4nfk"]
+[ext_resource type="Script" uid="uid://ba734ysspt8yo" path="res://objects/enemy/abilities/EnemyAbilityParameters.gd" id="5_f3dem"]
+
+[sub_resource type="Resource" id="Resource_66gk4"]
+resource_local_to_scene = true
+script = ExtResource("2_bqkuj")
+speed = 30.0
+max_health = 100.0
+defense = 10.0
+damage_susceptibility = 0.0
+healing_resistance = 0.0
+healing_susceptibility = 0.0
+metadata/_custom_type_script = ExtResource("2_bqkuj")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3hggp"]
 size = Vector2(18, 15)
 
-[node name="EnemyFollow" type="PathFollow2D"]
+[sub_resource type="SystemFont" id="SystemFont_bqkuj"]
+font_names = PackedStringArray("Arial")
+generate_mipmaps = true
+subpixel_positioning = 3
+multichannel_signed_distance_field = true
+oversampling = 0.5
 
-[node name="Enemy" type="CharacterBody2D" parent="."]
+[sub_resource type="GDScript" id="GDScript_bqkuj"]
+script/source = "extends ProgressBar
+
+func _process(delta: float) -> void:
+	global_position = $\"../..\".global_position + Vector2(-19, -22)
+	max_value = $\"../..\".parameters.max_health
+"
+
+[sub_resource type="Resource" id="Resource_63v5t"]
+resource_local_to_scene = true
+script = ExtResource("5_f3dem")
+metadata/_custom_type_script = ExtResource("5_f3dem")
+
+[node name="EnemyFollow" type="PathFollow2D"]
+loop = false
+
+[node name="Enemy" type="CharacterBody2D" parent="." node_paths=PackedStringArray("health") groups=["Enemy"]]
+collision_layer = 4
+collision_mask = 0
 script = ExtResource("1_aj7mv")
+parameters = SubResource("Resource_66gk4")
+health = NodePath("Health")
 
 [node name="Polygon2D" type="Polygon2D" parent="Enemy"]
 polygon = PackedVector2Array(-5, -9, 13, 0, -5, 8, -2, 0)
@@ -16,3 +56,26 @@ polygon = PackedVector2Array(-5, -9, 13, 0, -5, 8, -2, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
 position = Vector2(4, -0.5)
 shape = SubResource("RectangleShape2D_3hggp")
+
+[node name="Health" parent="Enemy" node_paths=PackedStringArray("parent") instance=ExtResource("3_bqkuj")]
+parent = NodePath("..")
+
+[node name="Node" type="Node" parent="Enemy"]
+
+[node name="ProgressBar" type="ProgressBar" parent="Enemy/Node"]
+offset_left = -19.0
+offset_top = -22.0
+offset_right = 28.0
+offset_bottom = -10.0
+theme_override_fonts/font = SubResource("SystemFont_bqkuj")
+theme_override_font_sizes/font_size = 5
+value = 100.0
+script = SubResource("GDScript_bqkuj")
+
+[node name="Reheal" parent="Enemy" node_paths=PackedStringArray("affected_enemy") instance=ExtResource("4_u4nfk")]
+affected_enemy = NodePath("..")
+parameters = SubResource("Resource_63v5t")
+
+[connection signal="damaged" from="Enemy/Health" to="Enemy/Reheal" method="get_damage" unbinds=1]
+[connection signal="death" from="Enemy/Health" to="Enemy" method="queue_free"]
+[connection signal="health_changed" from="Enemy/Health" to="Enemy/Node/ProgressBar" method="set_value" unbinds=1]

@@ -1,12 +1,22 @@
 extends CharacterBody2D
 class_name Enemy
 
-var progress : float = owner.progress :
+@onready var progress : float = owner.progress :
 	get:
 		return owner.progress
 	set(val):
-		owner.progress = val
 		progress = val
+@onready var progress_to : float = progress
+
+@export var parameters : EnemyParameters
+@export var health : Health
+
+signal appeared(enemy)
+
+func _ready() -> void:
+	appeared.connect(EB.enemy_appeared.emit)
+	appeared.emit(self)
 
 func _physics_process(delta: float) -> void:
-	owner.progress += delta * 30
+	progress_to += parameters.speed * delta
+	owner.progress = lerp(progress, progress_to, delta * 15)
