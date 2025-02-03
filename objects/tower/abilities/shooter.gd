@@ -10,7 +10,7 @@ func _process(delta):
 func apply() -> void:
 	if not enemy or not prepared:
 		return
-	
+	super()
 	$Gun.look_at(enemy.global_position)
 	$Gun/Gunpoint.shoot(enemy)
 	prepared = false

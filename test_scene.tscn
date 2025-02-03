@@ -1,54 +1,11 @@
-[gd_scene load_steps=33 format=4 uid="uid://djnxh23vndskx"]
+[gd_scene load_steps=14 format=4 uid="uid://djnxh23vndskx"]
 
 [ext_resource type="TileSet" uid="uid://b5u26jpydkuht" path="res://images/tilemap.tres" id="1_uhqqe"]
-[ext_resource type="PackedScene" uid="uid://8a1wtxhqnk46" path="res://objects/tower/tower.tscn" id="2_ia1lp"]
-[ext_resource type="PackedScene" uid="uid://nl8ld3drshgy" path="res://objects/tower/abilities/sunburst.tscn" id="3_buypi"]
-[ext_resource type="Script" uid="uid://bf8k1su06858r" path="res://objects/tower/abilities/ability_parameters.gd" id="3_njel3"]
-[ext_resource type="PackedScene" uid="uid://bqcb2r7cqy548" path="res://objects/tower/projectiles/projectile.tscn" id="4_coq8p"]
 [ext_resource type="Texture2D" uid="uid://csdwxf6w4b33q" path="res://images/anya.png" id="6_7cbxl"]
-[ext_resource type="Script" uid="uid://cleeutpm6hxsg" path="res://objects/tower/projectiles/projectile_parameters.gd" id="6_vr1i5"]
 [ext_resource type="Texture2D" uid="uid://u33i2ak6d25h" path="res://images/kaledoskop.jpg" id="7_buypi"]
 [ext_resource type="Texture2D" uid="uid://bsby6tmngk2c3" path="res://images/euphoria.jpg" id="8_njel3"]
 [ext_resource type="Texture2D" uid="uid://bsgvwbplmcfjh" path="res://images/hubris.jpg" id="9_njel3"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_njel3"]
-
-[sub_resource type="Resource" id="Resource_vr1i5"]
-script = ExtResource("3_njel3")
-range = 50.5
-cool_down = 35.0
-power = 0.0
-metadata/_custom_type_script = ExtResource("3_njel3")
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_oo8pe"]
-resource_local_to_scene = true
-radius = 60.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_vr1i5"]
-
-[sub_resource type="Resource" id="Resource_rpuu0"]
-script = ExtResource("3_njel3")
-range = 60.0
-cool_down = 37.0
-power = 0.0
-metadata/_custom_type_script = ExtResource("3_njel3")
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_4gito"]
-resource_local_to_scene = true
-radius = 60.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_rpuu0"]
-
-[sub_resource type="Resource" id="Resource_oo8pe"]
-script = ExtResource("3_njel3")
-range = 55.0
-cool_down = 80.0
-power = 0.0
-metadata/_custom_type_script = ExtResource("3_njel3")
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_fbuy2"]
-resource_local_to_scene = true
-radius = 60.0
+[ext_resource type="AudioStream" uid="uid://cy0hdnkqwqu3w" path="res://audio/ost/AncientGrace.mp3" id="9_vr1i5"]
 
 [sub_resource type="GDScript" id="GDScript_2nij2"]
 script/source = "extends Node
@@ -60,71 +17,38 @@ func _process(delta: float) -> void:
 
 var difficulty : float = 0
 
+func _ready() -> void:
+	if Dialogic.current_timeline != null:
+		return
+	else:
+		Dialogic.start('timeline')
+
 func _on_timer_timeout() -> void:
 	var pathenemy = preload(\"res://objects/enemy/enemy_follow.tscn\").instantiate()
 	var enemy : Enemy = pathenemy.get_child(0)
-	enemy.parameters.speed = randf_range(25, 75)
-	enemy.parameters.defense = randf_range(0, 200)
+	enemy.parameters.speed = randf_range(20, 40)
+	enemy.parameters.defense = randf_range(0, 100)
+	enemy.parameters.max_health = randf_range(50, 100)
 	enemy.parameters.speed += enemy.parameters.speed * difficulty / 100
 	enemy.parameters.defense += enemy.parameters.defense * difficulty / 100
+	enemy.parameters.max_health += enemy.parameters.max_health * difficulty / 100
 	$Path2D.add_child(pathenemy)
-	$Timer.wait_time = randf_range(1, 3)
-	difficulty += randf_range(-0.2, 1)
+	$Timer.start(randf_range(3, 8))
+	difficulty += randf_range(-0.1, 0.2)
 "
 
 [sub_resource type="Curve2D" id="Curve2D_coq8p"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 23, 41, 0, 0, 0, 0, 88, 42, 0, 0, 0, 0, 87, 135, 0, 0, 0, 0, 170, 134, 0, 0, 0, 0, 169, 87, 0, 0, 0, 0, 136, 88, 0, 0, 0, 0, 135, 25, 0, 0, 0, 0, 200, 26, 0, 0, 0, 0, 199, 71, 0, 0, 0, 0, 262, 74, 0, 0, 0, 0, 263, 131, 0, 0, 0, 0, 248, 139, 0, 0, 0, 0, 248, 152, 0, 0, 0, 0, 201, 154, 0, 0, 0, 0, 202, 200, 0, 0, 0, 0, 344, 198, 0, 0, 0, 0, 345, 104)
+"points": PackedVector2Array(0, 0, 0, 0, 24, 40, 0, 0, 0, 0, 88, 40, 0, 0, 0, 0, 88, 136, 0, 0, 0, 0, 168, 135, 0, 0, 0, 0, 168, 88, 0, 0, 0, 0, 136, 88, 0, 0, 0, 0, 137, 26, 0, 0, 0, 0, 200, 26, 0, 0, 0, 0, 199, 71, 0, 0, 0, 0, 262, 74, 0, 0, 0, 0, 264, 137, 0, 0, 0, 0, 248, 137, 0, 0, 0, 0, 249, 152, 0, 0, 0, 0, 201, 153, 0, 0, 0, 0, 202, 200, 0, 0, 0, 0, 344, 200, 0, 0, 0, 0, 344, 105)
 }
 point_count = 17
-
-[sub_resource type="Resource" id="Resource_4gito"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
-
-[sub_resource type="Resource" id="Resource_fbuy2"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
-
-[sub_resource type="Resource" id="Resource_0k8yu"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
-
-[sub_resource type="Resource" id="Resource_hiucn"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
-
-[sub_resource type="Resource" id="Resource_k6its"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
-
-[sub_resource type="Resource" id="Resource_2dw41"]
-resource_local_to_scene = true
-script = ExtResource("6_vr1i5")
-speed = 150.0
-damage = 15.0
-metadata/_custom_type_script = ExtResource("6_vr1i5")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vr1i5"]
 bg_color = Color(0.14902, 0.14902, 0.14902, 0.807843)
 
 [sub_resource type="SystemFont" id="SystemFont_7cbxl"]
 font_names = PackedStringArray("Certa Sans")
+subpixel_positioning = 0
 multichannel_signed_distance_field = true
 
 [sub_resource type="LabelSettings" id="LabelSettings_8pr8v"]
@@ -136,6 +60,7 @@ bg_color = Color(0.14902, 0.14902, 0.14902, 0.807843)
 
 [sub_resource type="SystemFont" id="SystemFont_njel3"]
 font_names = PackedStringArray("Certa Sans")
+subpixel_positioning = 0
 
 [node name="TestScene" type="Node2D"]
 
@@ -145,48 +70,8 @@ tile_set = ExtResource("1_uhqqe")
 metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(191, 109)
+position = Vector2(191, 113)
 zoom = Vector2(3, 3)
-
-[node name="Tower2" parent="." instance=ExtResource("2_ia1lp")]
-position = Vector2(123, 96)
-
-[node name="Collision" parent="Tower2" index="0"]
-shape = SubResource("CircleShape2D_njel3")
-
-[node name="Shooter" parent="Tower2/Abilities" index="0"]
-current_aim_mode = 1
-parameters = SubResource("Resource_vr1i5")
-
-[node name="CollisionShape2D" parent="Tower2/Abilities/Shooter/ViewArea2D" index="0"]
-shape = SubResource("CircleShape2D_oo8pe")
-
-[node name="Sunburst" parent="Tower2/Abilities" index="1" instance=ExtResource("3_buypi")]
-
-[node name="Tower4" parent="." instance=ExtResource("2_ia1lp")]
-position = Vector2(215, 111)
-
-[node name="Collision" parent="Tower4" index="0"]
-shape = SubResource("CircleShape2D_vr1i5")
-
-[node name="Shooter" parent="Tower4/Abilities" index="0"]
-current_aim_mode = 3
-parameters = SubResource("Resource_rpuu0")
-
-[node name="CollisionShape2D" parent="Tower4/Abilities/Shooter/ViewArea2D" index="0"]
-shape = SubResource("CircleShape2D_4gito")
-
-[node name="Tower3" parent="." instance=ExtResource("2_ia1lp")]
-position = Vector2(290, 155)
-
-[node name="Collision" parent="Tower3" index="0"]
-shape = SubResource("CircleShape2D_rpuu0")
-
-[node name="Shooter" parent="Tower3/Abilities" index="0"]
-parameters = SubResource("Resource_oo8pe")
-
-[node name="CollisionShape2D" parent="Tower3/Abilities/Shooter/ViewArea2D" index="0"]
-shape = SubResource("CircleShape2D_fbuy2")
 
 [node name="Director" type="Node" parent="."]
 script = SubResource("GDScript_2nij2")
@@ -195,32 +80,8 @@ script = SubResource("GDScript_2nij2")
 curve = SubResource("Curve2D_coq8p")
 
 [node name="Timer" type="Timer" parent="Director"]
-wait_time = 3.0
-autostart = true
-
-[node name="Projectile" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(91, 135)
-parameters = SubResource("Resource_4gito")
-
-[node name="Projectile2" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(168, 104)
-parameters = SubResource("Resource_fbuy2")
-
-[node name="Projectile3" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(178, 24)
-parameters = SubResource("Resource_0k8yu")
-
-[node name="Projectile4" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(264, 86)
-parameters = SubResource("Resource_hiucn")
-
-[node name="Projectile5" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(85, 42)
-parameters = SubResource("Resource_k6its")
-
-[node name="Projectile6" parent="." instance=ExtResource("4_coq8p")]
-position = Vector2(203, 201)
-parameters = SubResource("Resource_2dw41")
+wait_time = 0.001
+one_shot = true
 
 [node name="BoonMenu" type="CanvasLayer" parent="."]
 visible = false
@@ -377,14 +238,28 @@ bbcode_enabled = true
 text = "Когда мысль появляется в сознании, я наношу ей [color=brown]200% моего урона[/color]."
 horizontal_alignment = 1
 
-[connection signal="timeout" from="Director/Timer" to="Director" method="_on_timer_timeout"]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_vr1i5")
+volume_db = -5.0
+autoplay = true
+bus = &"Music"
 
-[editable path="Tower2"]
-[editable path="Tower2/Abilities/Shooter"]
-[editable path="Tower2/Abilities/Shooter/ViewArea2D"]
-[editable path="Tower4"]
-[editable path="Tower4/Abilities/Shooter"]
-[editable path="Tower4/Abilities/Shooter/ViewArea2D"]
-[editable path="Tower3"]
-[editable path="Tower3/Abilities/Shooter"]
-[editable path="Tower3/Abilities/Shooter/ViewArea2D"]
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Button" type="Button" parent="HUD"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -223.0
+offset_top = -97.0
+offset_right = -32.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Старт"
+
+[connection signal="timeout" from="Director/Timer" to="Director" method="_on_timer_timeout"]
+[connection signal="pressed" from="HUD/Button" to="Director/Timer" method="start"]
+[connection signal="pressed" from="HUD/Button" to="HUD/Button" method="queue_free"]

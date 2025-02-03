@@ -7,8 +7,8 @@
 [sub_resource type="Resource" id="Resource_cbkd6"]
 resource_local_to_scene = true
 script = ExtResource("2_0ctsk")
-speed = 185.0
-damage = 15.0
+speed = 196.5
+damage = 21.5
 metadata/_custom_type_script = ExtResource("2_0ctsk")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_aprps"]

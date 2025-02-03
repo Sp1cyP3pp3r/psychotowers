@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dc58a3wpfly63"]
+[gd_scene load_steps=14 format=3 uid="uid://dc58a3wpfly63"]
 
 [ext_resource type="Script" uid="uid://d1hf1fuauaq16" path="res://objects/tower/abilities/shooter.gd" id="1_h0xy5"]
 [ext_resource type="Script" uid="uid://bfo0t36eiylq2" path="res://objects/tower/abilities/ability_generic.gd" id="1_pr7pl"]
@@ -6,11 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://dkq5dyfxxb0o8" path="res://objects/tower/view_area_2d.tscn" id="3_c3u1a"]
 [ext_resource type="Texture2D" uid="uid://fhpqhlwd2uyp" path="res://objects/tower/twr_gun.png" id="5_puc03"]
 [ext_resource type="PackedScene" uid="uid://bqcb2r7cqy548" path="res://objects/tower/projectiles/projectile.tscn" id="6_5vlav"]
+[ext_resource type="AudioStream" uid="uid://b2jfq8cxmtcyg" path="res://audio/sfx/projectiles/fire1.wav" id="7_i46c1"]
+[ext_resource type="AudioStream" uid="uid://beg4mn5x243lg" path="res://audio/sfx/projectiles/fire2.wav" id="8_ajug0"]
+[ext_resource type="AudioStream" uid="uid://d3po5nw56fshp" path="res://audio/sfx/projectiles/fire3.wav" id="9_i0cs5"]
+[ext_resource type="AudioStream" uid="uid://svrrwfwacu5c" path="res://audio/sfx/projectiles/fire4.wav" id="10_yipr1"]
 
 [sub_resource type="Resource" id="Resource_5vlav"]
 script = ExtResource("2_c3u1a")
 range = 50.5
-cool_down = 20.0
+cool_down = 5.0
 power = 0.0
 metadata/_custom_type_script = ExtResource("2_c3u1a")
 
@@ -28,11 +32,19 @@ func shoot(target) -> void:
 	bullet.global_position = global_position
 "
 
-[node name="Shooter" type="Node2D" node_paths=PackedStringArray("view", "cd_timer")]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_otkpu"]
+streams_count = 4
+stream_0/stream = ExtResource("7_i46c1")
+stream_1/stream = ExtResource("8_ajug0")
+stream_2/stream = ExtResource("9_i0cs5")
+stream_3/stream = ExtResource("10_yipr1")
+
+[node name="Shooter" type="Node2D" node_paths=PackedStringArray("view", "cd_timer", "audio_stream_player")]
 script = ExtResource("1_h0xy5")
 view = NodePath("ViewArea2D")
 cd_timer = NodePath("Timer")
 parameters = SubResource("Resource_5vlav")
+audio_stream_player = NodePath("AudioStreamPlayer")
 metadata/_custom_type_script = ExtResource("1_pr7pl")
 
 [node name="ViewArea2D" parent="." instance=ExtResource("3_c3u1a")]
@@ -49,6 +61,10 @@ texture = ExtResource("5_puc03")
 position = Vector2(7, -0.5)
 script = SubResource("GDScript_puc03")
 projectile = ExtResource("6_5vlav")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamRandomizer_otkpu")
+bus = &"SFX"
 
 [connection signal="no_target" from="." to="." method="_on_no_target"]
 [connection signal="target_assigned" from="." to="." method="_on_target_assigned"]

@@ -1,10 +1,13 @@
-[gd_scene load_steps=11 format=3 uid="uid://bk0758xpby1jg"]
+[gd_scene load_steps=14 format=3 uid="uid://bk0758xpby1jg"]
 
 [ext_resource type="Script" uid="uid://bp2vu7xwmppiw" path="res://objects/enemy/enemy.gd" id="1_aj7mv"]
 [ext_resource type="Script" uid="uid://5a73qrvoh4qv" path="res://objects/enemy/enemy_params.gd" id="2_bqkuj"]
 [ext_resource type="PackedScene" uid="uid://ctugs1kl1t4ur" path="res://objects/health/health.tscn" id="3_bqkuj"]
-[ext_resource type="PackedScene" uid="uid://1bbkm3q7nyth" path="res://objects/enemy/abilities/reheal.tscn" id="4_u4nfk"]
-[ext_resource type="Script" uid="uid://ba734ysspt8yo" path="res://objects/enemy/abilities/EnemyAbilityParameters.gd" id="5_f3dem"]
+[ext_resource type="AudioStream" uid="uid://bdk4h6vthjqgu" path="res://audio/sfx/enemies/hit1.wav" id="4_v6ot4"]
+[ext_resource type="AudioStream" uid="uid://jjfiejcq7mgf" path="res://audio/sfx/enemies/hit2.wav" id="5_aacbb"]
+[ext_resource type="AudioStream" uid="uid://bgiu2s2n3lcb3" path="res://audio/sfx/enemies/hit3.wav" id="6_j7mma"]
+[ext_resource type="AudioStream" uid="uid://vrha3iukeo7j" path="res://audio/sfx/enemies/hit4.wav" id="7_ojxd0"]
+[ext_resource type="AudioStream" uid="uid://ccqlpij7s3iw0" path="res://audio/sfx/enemies/hit5.wav" id="8_qfg57"]
 
 [sub_resource type="Resource" id="Resource_66gk4"]
 resource_local_to_scene = true
@@ -20,6 +23,14 @@ metadata/_custom_type_script = ExtResource("2_bqkuj")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3hggp"]
 size = Vector2(18, 15)
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_njkc7"]
+streams_count = 5
+stream_0/stream = ExtResource("4_v6ot4")
+stream_1/stream = ExtResource("5_aacbb")
+stream_2/stream = ExtResource("6_j7mma")
+stream_3/stream = ExtResource("7_ojxd0")
+stream_4/stream = ExtResource("8_qfg57")
+
 [sub_resource type="SystemFont" id="SystemFont_bqkuj"]
 font_names = PackedStringArray("Arial")
 generate_mipmaps = true
@@ -34,11 +45,6 @@ func _process(delta: float) -> void:
 	global_position = $\"../..\".global_position + Vector2(-19, -22)
 	max_value = $\"../..\".parameters.max_health
 "
-
-[sub_resource type="Resource" id="Resource_63v5t"]
-resource_local_to_scene = true
-script = ExtResource("5_f3dem")
-metadata/_custom_type_script = ExtResource("5_f3dem")
 
 [node name="EnemyFollow" type="PathFollow2D"]
 loop = false
@@ -60,6 +66,10 @@ shape = SubResource("RectangleShape2D_3hggp")
 [node name="Health" parent="Enemy" node_paths=PackedStringArray("parent") instance=ExtResource("3_bqkuj")]
 parent = NodePath("..")
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Enemy/Health"]
+stream = SubResource("AudioStreamRandomizer_njkc7")
+bus = &"SFX"
+
 [node name="Node" type="Node" parent="Enemy"]
 
 [node name="ProgressBar" type="ProgressBar" parent="Enemy/Node"]
@@ -72,10 +82,6 @@ theme_override_font_sizes/font_size = 5
 value = 100.0
 script = SubResource("GDScript_bqkuj")
 
-[node name="Reheal" parent="Enemy" node_paths=PackedStringArray("affected_enemy") instance=ExtResource("4_u4nfk")]
-affected_enemy = NodePath("..")
-parameters = SubResource("Resource_63v5t")
-
-[connection signal="damaged" from="Enemy/Health" to="Enemy/Reheal" method="get_damage" unbinds=1]
+[connection signal="damaged" from="Enemy/Health" to="Enemy/Health/AudioStreamPlayer" method="play" unbinds=2]
 [connection signal="death" from="Enemy/Health" to="Enemy" method="queue_free"]
 [connection signal="health_changed" from="Enemy/Health" to="Enemy/Node/ProgressBar" method="set_value" unbinds=1]

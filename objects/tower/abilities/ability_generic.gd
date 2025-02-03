@@ -34,7 +34,7 @@ var prepared : bool = true
 ## Utilizes the ability. Either fire a projectile, send a chain lightning or single-time
 ## creates an aura, etc.
 func apply() -> void:
-	pass
+	audio_stream_player.play()
 
 func cooldown_end() -> void:
 	prepared = true
@@ -76,6 +76,8 @@ func current_target(aim_mode : AIM_MODE = current_aim_mode) -> Enemy:
 	return enemy
 
 @export var parameters : AbilityParameters
+
+@export var audio_stream_player : AudioStreamPlayer
 
 func update_range(value : float) -> void:
 	view.collision.shape.radius = value

@@ -16,7 +16,9 @@ signal appeared(enemy)
 func _ready() -> void:
 	appeared.connect(EB.enemy_appeared.emit)
 	appeared.emit(self)
+	
 
 func _physics_process(delta: float) -> void:
 	progress_to += parameters.speed * delta
 	owner.progress = lerp(progress, progress_to, delta * 15)
+	$Node/ProgressBar.max_value = parameters.max_health

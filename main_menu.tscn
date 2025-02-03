@@ -1,0 +1,162 @@
+[gd_scene load_steps=10 format=3 uid="uid://cr6jyaignp55c"]
+
+[ext_resource type="Texture2D" uid="uid://q2o07hdnepat" path="res://images/main-bg.jpg" id="1_06t4h"]
+[ext_resource type="PackedScene" uid="uid://djnxh23vndskx" path="res://test_scene.tscn" id="1_nlkkf"]
+[ext_resource type="Texture2D" uid="uid://bxrtliliixveb" path="res://images/kiki.png" id="2_jix8l"]
+[ext_resource type="Texture2D" uid="uid://dodevdfkkcpss" path="res://images/donut.png" id="3_glbon"]
+[ext_resource type="Texture2D" uid="uid://bmb5a868goxte" path="res://images/box.png" id="4_nlkkf"]
+[ext_resource type="AudioStream" uid="uid://c4k246qksoxbk" path="res://audio/ost/MainNew.mp3" id="5_glbon"]
+
+[sub_resource type="GDScript" id="GDScript_jix8l"]
+script/source = "extends Control
+
+@export var offset : float = 5
+@export var paral_children : Array[TextureRect]
+
+func _ready():
+	for child in paral_children:
+		var rand : Vector2 = Vector2(randf_range(-30, 30), randf_range(-30, 30))
+		child.set_meta(\"offset\", child.global_position + rand)
+		child.set_meta(\"velocity\", randf_range(0.1, 2))
+
+func _process(delta: float) -> void:
+	for child in paral_children:
+		child.global_position = lerp(child.global_position, child.get_meta(\"offset\")\\
+		+ get_global_mouse_position() / offset - get_viewport_rect().size / (offset * 2),\\
+		delta * child.get_meta(\"velocity\"))
+	
+	var center = %Title.global_position + %Title.size/2
+	var growth = center.distance_to(get_global_mouse_position())/50
+	%Title.label_settings.shadow_offset = lerp(%Title.label_settings.shadow_offset,\\
+	center.direction_to(get_global_mouse_position()) * -growth, delta * 15)
+
+func exit():
+	get_tree().quit()
+
+@export var pck_scn : PackedScene
+func transition():
+	get_tree().change_scene_to_packed(pck_scn)
+"
+
+[sub_resource type="SystemFont" id="SystemFont_7vrkn"]
+font_names = PackedStringArray("Certa Serif")
+
+[sub_resource type="LabelSettings" id="LabelSettings_fu7sn"]
+font = SubResource("SystemFont_7vrkn")
+font_size = 72
+font_color = Color(0.84966, 0.525353, 0.652647, 1)
+outline_size = 9
+outline_color = Color(0.999533, 0.996089, 0.997008, 1)
+shadow_size = 6
+shadow_color = Color(0.1463, 0.43736, 0.77, 0.552941)
+shadow_offset = Vector2(5, 5)
+
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("paral_children")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_jix8l")
+paral_children = [NodePath("TextureRect2"), NodePath("TextureRect3"), NodePath("TextureRect4")]
+pck_scn = ExtResource("1_nlkkf")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_06t4h")
+metadata/_edit_lock_ = true
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 684.0
+offset_top = 136.0
+offset_right = -263.0
+offset_bottom = 23.0
+texture = ExtResource("2_jix8l")
+
+[node name="TextureRect3" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 58.0
+offset_top = 539.0
+offset_right = -390.0
+offset_bottom = 19.0001
+rotation = -0.992134
+texture = ExtResource("3_glbon")
+
+[node name="TextureRect4" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 898.0
+offset_top = 515.0
+offset_right = -87.0
+offset_bottom = 27.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.992706
+texture = ExtResource("4_nlkkf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -237.0
+offset_right = 173.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Start" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start"
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="Exit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="Title" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -146.0
+offset_right = 210.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PsychoTowers"
+label_settings = SubResource("LabelSettings_fu7sn")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_glbon")
+autoplay = true
+bus = &"Music"
+
+[connection signal="pressed" from="VBoxContainer/Start" to="." method="transition"]
+[connection signal="pressed" from="VBoxContainer/Exit" to="." method="exit"]
