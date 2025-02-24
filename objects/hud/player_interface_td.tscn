@@ -1,0 +1,220 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4cqp3neqi55j"]
+
+[ext_resource type="Texture2D" uid="uid://bmb5a868goxte" path="res://images/box.png" id="1_0er7o"]
+[ext_resource type="Script" uid="uid://bpqtk7fuhsctd" path="res://objects/hud/player_interface_td.gd" id="1_n5nem"]
+[ext_resource type="Texture2D" uid="uid://dodevdfkkcpss" path="res://images/donut.png" id="3_l24pj"]
+
+[sub_resource type="Animation" id="Animation_h2rq1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TowerInventory:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(906, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_l24pj"]
+resource_name = "slide_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TowerInventory:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.615572, 1),
+"update": 0,
+"values": [Vector2(1107, 0), Vector2(857, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_awiia"]
+resource_name = "slide_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TowerInventory:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.34151, 1),
+"update": 0,
+"values": [Vector2(857, 0), Vector2(1107, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lf46m"]
+_data = {
+&"RESET": SubResource("Animation_h2rq1"),
+&"slide_in": SubResource("Animation_l24pj"),
+&"slide_out": SubResource("Animation_awiia")
+}
+
+[node name="PlayerInterfaceTD" type="CanvasLayer"]
+script = ExtResource("1_n5nem")
+
+[node name="TowerInventory" type="MarginContainer" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -246.0
+offset_right = 49.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TowerInventory"]
+layout_mode = 2
+alignment = 2
+
+[node name="CheckButton" type="CheckButton" parent="TowerInventory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+flat = true
+
+[node name="PanelContainer" type="PanelContainer" parent="TowerInventory/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FlowContainer" type="HFlowContainer" parent="TowerInventory/HBoxContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton2" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton3" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton4" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton5" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton6" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="TextureButton7" type="TextureButton" parent="TowerInventory/HBoxContainer/PanelContainer/FlowContainer"]
+layout_mode = 2
+texture_normal = ExtResource("1_0er7o")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_lf46m")
+}
+autoplay = "slide_out"
+
+[node name="Resources" type="VFlowContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 242.0
+grow_vertical = 0
+theme_override_constants/h_separation = 10
+
+[node name="Emotion" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Emotion2" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion2"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Emotion3" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion3"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Emotion4" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion4"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Emotion5" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion5"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[node name="Emotion6" type="HBoxContainer" parent="Resources"]
+layout_mode = 2
+
+[node name="EmotionImage" type="TextureRect" parent="Resources/Emotion6"]
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("3_l24pj")
+expand_mode = 2
+
+[node name="Amount" type="Label" parent="Resources/Emotion6"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+
+[connection signal="toggled" from="TowerInventory/HBoxContainer/CheckButton" to="." method="show_hide_inventory"]

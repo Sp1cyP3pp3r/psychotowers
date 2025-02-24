@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=4 uid="uid://djnxh23vndskx"]
+[gd_scene load_steps=15 format=4 uid="uid://djnxh23vndskx"]
 
 [ext_resource type="TileSet" uid="uid://b5u26jpydkuht" path="res://images/tilemap.tres" id="1_uhqqe"]
 [ext_resource type="Texture2D" uid="uid://csdwxf6w4b33q" path="res://images/anya.png" id="6_7cbxl"]
+[ext_resource type="PackedScene" uid="uid://c4cqp3neqi55j" path="res://objects/hud/player_interface_td.tscn" id="7_8pr8v"]
 [ext_resource type="Texture2D" uid="uid://u33i2ak6d25h" path="res://images/kaledoskop.jpg" id="7_buypi"]
 [ext_resource type="Texture2D" uid="uid://bsby6tmngk2c3" path="res://images/euphoria.jpg" id="8_njel3"]
 [ext_resource type="Texture2D" uid="uid://bsgvwbplmcfjh" path="res://images/hubris.jpg" id="9_njel3"]
@@ -259,6 +260,8 @@ offset_bottom = -39.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "Старт"
+
+[node name="PlayerInterfaceTD" parent="." instance=ExtResource("7_8pr8v")]
 
 [connection signal="timeout" from="Director/Timer" to="Director" method="_on_timer_timeout"]
 [connection signal="pressed" from="HUD/Button" to="Director/Timer" method="start"]
